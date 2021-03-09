@@ -23,9 +23,6 @@ export default {
 .right {
   width: 60px;
 }
-
-
-
 .center {
   flex: 1;
 }
