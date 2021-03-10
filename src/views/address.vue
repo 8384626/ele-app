@@ -21,13 +21,13 @@
           <input
             type="text"
             v-model="search_val"
-            placeholder="小区/写字楼/学校等"
+            placeholder="小区/写字楼/学校"
           />
         </span>
       </div>
-      <location :address="address"></location>
+      <location @click="selectAddress" :address="address"></location>
     </div>
-      <div class="tips">
+    <div class="tips">
       <div class="tips_list" v-for="(item, index) in TipList" :key="index">
         <li @click="selectAddress(item)">
           <h4>{{ item.name }}</h4>
@@ -69,10 +69,14 @@ export default {
     },
     selectAddress(item) {
       // 设置地址
-      this.$store.dispatch(
-        "setAddress",
-        item.district + item.address + item.name
-      );
+      if (item) {
+        this.$store.dispatch(
+          "setAddress",
+          item.district + item.address + item.name
+        );
+      }else{
+        this.$store.dispatch("setAddress",this.address)
+      }
       this.$router.push("/home");
     },
   },
@@ -91,8 +95,15 @@ export default {
     location,
   },
   beforeRouteEnter(to, from, next) {
+    console.log(to.params.city);
     next((vm) => {
-      vm.city = to.params.city;
+      if(to.params.city === '成都市'){
+        vm.city = to.params.city.slice(0,2);
+      }else if(to.params.city.length >=7){
+        vm.city = to.params.city.slice(0,6);
+      }else{
+        vm.city = to.params.city;
+      }
     });
   },
 };
@@ -152,7 +163,7 @@ export default {
   margin-left: 10px;
 }
 .search input {
-  width: 50%;
+  width: 40%;
   margin-left: 5px;
   background-color: #eee;
   outline: none;

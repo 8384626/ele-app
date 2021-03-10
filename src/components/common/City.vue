@@ -5,15 +5,41 @@
         <img src="~assets/img/address/zoom.svg" alt="" />
         <input type="text" v-model="city_val" placeholder="请输入城市名字" />
       </div>
-      <button @click="$router.go(-1)">取消</button>
+      <button @click="$router.push({name:'address',params:{city:city}})">取消</button>
     </div>
-    <div class="wrapper">
+    <div class="wrapper" v-if="searchList.length == 0">
       <div class="location">
-        <location :address="city"></location>
+        <location @click="selectCity({name:city})" :address="city"></location>
       </div>
-      <scroll class="content">
-        <alphabet :cityInfo="cityInfo" :keys="keys"></alphabet>
+      <scroll class="content" ref="scroll">
+        <alphabet
+          ref="alphabet"
+          :cityInfo="cityInfo"
+          :keys="keys"
+          @selectCity="selectCity"
+        ></alphabet>
       </scroll>
+    </div>
+    <div class="area_keys" v-if="searchList.length == 0">
+      <ul>
+        <li>#</li>
+        <li
+          v-for="(item, index) in keys"
+          :key="index"
+          @click="selectKey(index)"
+        >
+          {{ item }}
+        </li>
+      </ul>
+    </div>
+    <div class="search_list" v-else>
+      <div class="search_content">
+        <ul>
+        <li @click="selectCity(item)" v-for="(item,index) in searchList" :key="index">
+          {{item.name}}
+        </li>
+      </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -21,7 +47,7 @@
 <script>
 import location from "components/common/location.vue";
 import alphabet from "components/content/Alphabet/alphabet.vue";
-import Scroll from 'components/content/scroll/scroll.vue';
+import Scroll from "components/content/scroll/scroll.vue";
 
 export default {
   name: "city",
@@ -30,6 +56,8 @@ export default {
       city_val: "",
       cityInfo: null,
       keys: [],
+      allCites:[],
+      searchList:[]
     };
   },
   methods: {
@@ -41,8 +69,33 @@ export default {
         this.keys = Object.keys(res.data);
         this.keys.pop();
         this.keys.sort();
+        // 存储所有城市 
+        this.keys.forEach(key=>{
+          // console.log(key);
+          this.cityInfo[key].forEach(city =>{
+            this.allCites.push(city)
+          })
+        })
       });
     },
+    selectKey(index) {
+      // console.log(index);
+      const cityList = this.$refs.alphabet.getDom();
+      let el = cityList[index];
+      this.$refs.scroll.scrollToElement(el, 250);
+    },
+    selectCity(city) {
+      this.$router.push({ name: "address", params: { city: city.name } });
+    },
+    searchCity(){
+      if(!this.city_val.trim()){
+        this.searchList = []
+      }else {
+        this.searchList = this.allCites.filter(item =>{
+          return item.name.indexOf(this.city_val) != -1
+        })
+      }
+    }
   },
   computed: {
     city() {
@@ -52,6 +105,11 @@ export default {
       );
     },
   },
+  watch:{
+    city_val(){
+      this.searchCity()
+    }
+  },
   components: {
     location,
     alphabet,
@@ -59,7 +117,7 @@ export default {
   },
   created() {
     this.getCityInfo();
-  },
+  }
 };
 </script>
 
@@ -107,7 +165,7 @@ export default {
   color: #009eef;
   background-color: #fff;
 }
-.wrapper{
+.wrapper {
   position: relative;
   background-color: #eee;
   z-index: 10;
@@ -118,7 +176,7 @@ export default {
   height: 65px;
   box-sizing: border-box;
 }
-.content{
+.content {
   position: absolute;
   top: 65px;
   bottom: 0;
@@ -127,5 +185,32 @@ export default {
   height: calc(100vh - 110px);
   overflow: hidden;
   z-index: 100;
+}
+.area_keys {
+  position: fixed;
+  right: 0;
+  top: 25%;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0 5px;
+  z-index: 10;
+}
+.search_list{
+  position: relative;
+  top: 0px;
+  left: 0;
+  height: calc(100vh - 45px);
+  background-color: #eee;
+  z-index: 10;
+}
+.search_content {
+  background: #fff;
+  padding: 5px 16px;
+}
+.search_content li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 </style>

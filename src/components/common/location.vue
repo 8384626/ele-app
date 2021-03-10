@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="title">当前定位</div>
-    <div class="des">
+    <div class="des" @click="$emit('click')">
       <img src="~assets/img/location/location-arrow.svg" alt="" />
       <span>{{ address }}</span>
     </div>

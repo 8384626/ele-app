@@ -24,6 +24,11 @@ export default {
       scroll: null
     };
   },
+  methods:{
+    scrollToElement(op, time = 1000) {
+      this.scroll && this.scroll.scrollToElement(op, time);
+    },
+  },
   mounted() {
     // 创建BScroll实例
     this.scroll = new BScroll(this.$refs.wrapper, {

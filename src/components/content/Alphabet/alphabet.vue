@@ -1,23 +1,35 @@
 <template>
-  <div class="alphabet" v-if="cityInfo">
+  <div class="alphabet" ref="area_scroll" v-if="cityInfo">
     <div class="scroll_wrap">
       <!-- 热门城市 -->
       <div class="hot_wrap">
         <div class="title"><span>热门城市</span></div>
         <ul class="hot_city">
-          <li v-for="(item, index) in cityInfo.hotCities" :key="index">
+          <li
+            v-for="(item, index) in cityInfo.hotCities"
+            :key="index"
+            @click="$emit('selectCity', item)"
+          >
             {{ item.name }}
           </li>
         </ul>
       </div>
       <!-- 所有城市 -->
       <div class="city_wrap">
-        <div class="city_content" v-for="(item, index) in keys" :key="index">
+        <div
+          class="city_content cityList"
+          v-for="(item, index) in keys"
+          :key="index"
+        >
           <div class="title">
             {{ item }}
           </div>
           <ul>
-            <li v-for="(city, index) in cityInfo[item]" :key="index">
+            <li
+              v-for="(city, index) in cityInfo[item]"
+              :key="index"
+              @click="$emit('selectCity', city)"
+            >
               {{ city.name }}
             </li>
           </ul>
@@ -43,14 +55,19 @@ export default {
         return [];
       },
     },
-  }
+  },
+  methods: {
+    getDom() {
+      return this.$refs.area_scroll.getElementsByClassName("cityList");
+    },
+  },
 };
 </script>
 
 <style scoped>
-.alphabet{
+.alphabet {
   background-color: #fff;
-  overflow: hidden;
+  overflow: auto;
 }
 .scroll_wrap {
   background: #fff;
@@ -77,5 +94,15 @@ export default {
 .city_content li {
   padding: 10px;
   border-bottom: 1px solid #eee;
+}
+.area_keys {
+  position: fixed;
+  right: 0;
+  top: 25%;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0 5px;
 }
 </style>
