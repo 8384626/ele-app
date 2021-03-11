@@ -95,7 +95,6 @@ export default {
     location,
   },
   beforeRouteEnter(to, from, next) {
-    console.log(to.params.city);
     next((vm) => {
       if(to.params.city === '成都市'){
         vm.city = to.params.city.slice(0,2);
