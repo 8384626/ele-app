@@ -10,7 +10,7 @@
         <img src="~assets/img/home/dropdown.svg" alt="" />
       </div>
     </div>
-    <div class="search_wrap">
+    <div class="search_wrap" :class="{'fixedView':showFilter}">
       <div class="shop_search">
         <img src="~assets/img/home/Zoom.svg" alt="" />
         <span>搜索商家 商家名称</span>
@@ -42,7 +42,7 @@
     <!-- 推荐商家 -->
     <div class="shoplist-title">推荐商家</div>
     <!-- 导航 -->
-    <filter-view :filterData="filterData"></filter-view>
+    <filter-view :filterData="filterData" @searchFixed="searchFixed" @updata="updata"></filter-view>
   </div>
 </template>
 
@@ -59,6 +59,7 @@ export default {
       swipeImgs: [],
       entries: [],
       filterData: null,
+      showFilter:false
     };
   },
   methods: {
@@ -69,8 +70,15 @@ export default {
       });
       this.$axios("/api/profile/filter").then((res) => {
         this.filterData = res.data;
+        console.log(res.data);
       });
     },
+    searchFixed(isShow) {
+      this.showFilter = isShow 
+    },
+    updata(condation){
+      console.log(condation);
+    }
   },
   computed: {
     address() {
@@ -197,5 +205,11 @@ export default {
 }
 .shoplist-title:after {
   margin-left: 3.466667vw;
+}
+.fixedView{
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 999;
 }
 </style>
