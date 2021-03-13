@@ -28,6 +28,10 @@ export default {
     scrollToElement(op, time = 1000) {
       this.scroll && this.scroll.scrollToElement(op, time);
     },
+    refresh() {
+      // console.log("1111");
+      this.scroll && this.scroll.refresh();
+    },
   },
   mounted() {
     // 创建BScroll实例

@@ -1,7 +1,7 @@
 <template>
   <div :class="{ open: isShowSort || isScreen }" @click.self="hideView">
     <!-- 导航 -->
-    <div v-if="filterData" class="filter_wrap">
+    <div v-if="filterData" class="filter_wrap" :class="{'openHome':isHomeStyle,'openSearch':isSearchStyle}">
       <aside class="filter">
         <div
           class="filter-nav"
@@ -16,7 +16,7 @@
       </aside>
     </div>
     <!-- 排序 -->
-    <section class="filter-extend" v-if="isShowSort">
+    <section class="filter-extend" :class="{'openfiler':isSearchStyle}" v-if="isShowSort">
       <ul>
         <li
           v-for="(item, index) in filterData.sortBy"
@@ -73,6 +73,14 @@ export default {
       type: Object,
       default: {},
     },
+    isHomeStyle:{
+      type:Boolean,
+      default:false
+    },
+    isSearchStyle:{
+      type:Boolean,
+      default:false
+    }
   },
   data() {
     return {
@@ -92,13 +100,13 @@ export default {
           break;
         case 1:
           this.$emit("updata", {
-            condation: this.filterData.navTab[1].condition,
+            condition: this.filterData.navTab[1].condition,
           });
           this.hideView();
           break;
         case 2:
           this.$emit("updata", {
-            condation: this.filterData.navTab[2].condition,
+            condition: this.filterData.navTab[2].condition,
           });
           this.hideView();
           break;
@@ -185,9 +193,15 @@ export default {
 <style scoped>
 .filter_wrap {
   background: #fff;
+  z-index: 10;
+}
+.openHome{
   position: sticky;
   top: 54px;
-  z-index: 10;
+}
+.openSearch{
+  position: sticky;
+  top: 44px;
 }
 .filter {
   position: relative;
@@ -224,7 +238,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   transition: all 0.3s ease-in-out;
-  z-index: 3;
+  z-index: 0;
 }
 .filter-extend {
   background-color: #fff;
@@ -235,6 +249,9 @@ export default {
   z-index: 4;
   left: 0;
   top: 24.533333vw;
+}
+.openfiler{
+  top: 22.533333vw;
 }
 .filter-extend li {
   position: relative;

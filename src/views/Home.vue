@@ -10,7 +10,11 @@
         <img src="~assets/img/home/dropdown.svg" alt="" />
       </div>
     </div>
-    <div class="search_wrap" :class="{'fixedView':showFilter}">
+    <div
+      class="search_wrap"
+      :class="{ fixedView: showFilter }"
+      @click="$router.push('/search')"
+    >
       <div class="shop_search">
         <img src="~assets/img/home/Zoom.svg" alt="" />
         <span>搜索商家 商家名称</span>
@@ -42,16 +46,39 @@
     <!-- 推荐商家 -->
     <div class="shoplist-title">推荐商家</div>
     <!-- 导航 -->
-    <filter-view :filterData="filterData" @searchFixed="searchFixed" @updata="updata"></filter-view>
+    <filter-view
+      :filterData="filterData"
+      :isHomeStyle="true"
+      @searchFixed="searchFixed"
+      @updata="updata"
+    ></filter-view>
+    <!-- 商家信息 -->
+    <mt-loadmore
+      :top-method="loadData"
+      :bottom-method="loadMore"
+      :bottom-all-loaded="allLoaded"
+      :auto-fill="false"
+      :bottomPullText="bottomPullText"
+      ref="loadmore"
+    >
+      <div class="shoplist">
+        <index-shop
+          v-for="(item, index) in restaurants"
+          :key="index"
+          :restaurant="item.restaurant"
+        ></index-shop>
+      </div>
+    </mt-loadmore>
   </div>
 </template>
 
 <script>
 import { Swiper, SwiperItem } from "components/content/swiper";
 import FilterView from "components/common/FilterView";
+import indexShop from "components/common/indexShop";
+import Scroll from "components/content/scroll/scroll.vue";
 
-import { Swipe, SwipeItem } from "mint-ui";
-
+import { Swipe, SwipeItem, Loadmore } from "mint-ui";
 export default {
   name: "home",
   data() {
@@ -59,7 +86,13 @@ export default {
       swipeImgs: [],
       entries: [],
       filterData: null,
-      showFilter:false
+      showFilter: false,
+      page: 1,
+      size: 5,
+      restaurants: [], // 存放所有的商家信息
+      allLoaded: false,
+      bottomPullText: "上拉加载更多",
+      data: null,
     };
   },
   methods: {
@@ -72,13 +105,53 @@ export default {
         this.filterData = res.data;
         console.log(res.data);
       });
+      this.loadData();
     },
     searchFixed(isShow) {
-      this.showFilter = isShow 
+      this.showFilter = isShow;
     },
-    updata(condation){
-      console.log(condation);
-    }
+    updata(condation) {
+      // console.log(condation);
+      this.data = condation;
+      this.loadData();
+    },
+    loadData() {
+      this.page = 1;
+      this.allLoaded = false;
+      this.bottomPullText = "上拉加载更多";
+      // 获取商家信息
+      this.$axios
+        .post(`/api/profile/restaurants/${this.page}/${this.size}`, this.data)
+        .then((res) => {
+          // console.log(res.data);
+          this.$refs.loadmore.onTopLoaded();
+          this.restaurants = res.data;
+        });
+    },
+    loadMore() {
+      if (!this.allLoaded) {
+        this.page++;
+        // 获取商家信息
+        this.$axios
+          .post(`/api/profile/restaurants/${this.page}/${this.size}`)
+          .then((res) => {
+            this.$refs.loadmore.onBottomLoaded();
+            if (res.data.length > 0) {
+              res.data.forEach((item) => {
+                this.restaurants.push(item);
+              });
+              if (res.data < this.size) {
+                this.allLoaded = true;
+                this.bottomPullText = "没有更多了哦";
+              }
+            } else {
+              // 数据为空
+              this.allLoaded = true;
+              this.bottomPullText = "没有更多了哦";
+            }
+          });
+      }
+    },
   },
   computed: {
     address() {
@@ -94,7 +167,9 @@ export default {
   components: {
     Swiper,
     SwiperItem,
-    FilterView
+    FilterView,
+    indexShop,
+    Scroll,
   },
   created() {
     this.getData();
@@ -206,10 +281,17 @@ export default {
 .shoplist-title:after {
   margin-left: 3.466667vw;
 }
-.fixedView{
+.fixedView {
   width: 100%;
   position: fixed;
   top: 0;
   z-index: 999;
 }
+.mint-loadmore {
+  height: calc(100% - 98px);
+  overflow: auto;
+}
+/* .shoplist {
+  margin-bottom: 5px;
+} */
 </style>
