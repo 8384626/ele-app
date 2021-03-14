@@ -46,11 +46,34 @@ const routes = [
     name: "search",
     component: () => import("../views/search.vue"),
   },
+  {
+    path: "/shop",
+    name: "shop",
+    component: () => import("../views/shops/shop.vue"),
+    children:[
+      {
+        path: "/goods",
+        name: "goods",
+        component: () => import("../views/shops/goods.vue"),
+      },
+      {
+        path: "/comments",
+        name: "comments",
+        component: () => import("../views/shops/comments.vue"),
+      },
+      {
+        path: "/seller",
+        name: "seller",
+        component: () => import("../views/shops/seller.vue"),
+      },
+    ]
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
+  linkActiveClass:"active",
   routes,
 });
 

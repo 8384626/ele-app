@@ -28,7 +28,7 @@
       </div>
       <div v-else>
         <search-index
-          @click="shopItemClick"
+          @click="$router.push('/shop')"
           :data="result.restaurants"
         ></search-index>
         <search-index

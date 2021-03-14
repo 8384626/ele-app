@@ -76,7 +76,6 @@
 import { Swiper, SwiperItem } from "components/content/swiper";
 import FilterView from "components/common/FilterView";
 import indexShop from "components/common/indexShop";
-import Scroll from "components/content/scroll/scroll.vue";
 
 import { Swipe, SwipeItem, Loadmore } from "mint-ui";
 export default {
@@ -169,7 +168,6 @@ export default {
     SwiperItem,
     FilterView,
     indexShop,
-    Scroll,
   },
   created() {
     this.getData();

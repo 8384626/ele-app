@@ -14,10 +14,6 @@ export default {
       type: Number,
       default: 0
     },
-    pullUpLoad: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {
@@ -38,9 +34,16 @@ export default {
     this.scroll = new BScroll(this.$refs.wrapper, {
       click: true,
       observeDOM: true,
-      probeType: this.probeType,
-      pullUpLoad: this.pullUpLoad
+      observeImage:true,
+      probeType:this.probeType
     });
+    this.scroll.refresh()
+    this.$emit('BScrollData', this.scroll);
+    if (this.probeType === 2 || this.probeType === 3) {
+      this.scroll.on("scroll", position => {
+        this.$emit("scrollPostion", position);
+      });
+    }
   }
 };
 </script>
