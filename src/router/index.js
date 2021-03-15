@@ -48,7 +48,7 @@ const routes = [
   },
   {
     path: "/shop",
-    name: "shop",
+    redirect:"goods",
     component: () => import("../views/shops/shop.vue"),
     children:[
       {

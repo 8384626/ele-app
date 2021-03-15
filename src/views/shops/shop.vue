@@ -37,7 +37,9 @@
     </div>
     <!-- 导航 -->
     <nav-bar></nav-bar>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -57,7 +59,6 @@ export default {
   methods: {
     getData() {
       this.$axios("/api/profile/batch_shop").then((res) => {
-        console.log(res.data);
         this.shopInfo = res.data;
       });
     },

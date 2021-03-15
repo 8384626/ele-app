@@ -69,7 +69,12 @@
                 <strong>{{ item.name }}</strong>
                 <span>{{ item.description }}</span>
               </div>
-              <div v-for="(food, i) in item.foods" :key="i" class="fooddetails">
+              <div
+                v-for="(food, i) in item.foods"
+                :key="i"
+                class="fooddetails"
+                @click="handleFood(food)"
+              >
                 <img :src="food.image_path" />
                 <section class="fooddetails-info">
                   <h4>{{ food.name }}</h4>
@@ -90,13 +95,17 @@
     </div>
     <!-- 购物车 -->
     <shop-cart :shopInfo="shopInfo"></shop-cart>
+    <!-- 商品的详情 -->
+    <food :food="selectedFood" :isShowFood="isShowFood" @close="isShowFood = false"></food>
   </div>
 </template>
 
 <script>
-import shopCart from "./shopCart"
+import shopCart from "./shopCart";
 
 import cartControl from "components/common/shop/cartControl";
+import food from "components/common/shop/food";
+
 import Scroll from "components/content/scroll/scroll.vue";
 
 export default {
@@ -108,6 +117,8 @@ export default {
       foodScroll: {},
       scrollY: 0, // 右侧菜单滚动的具体高度
       listHeight: [], // 12个区列表高度
+      selectedFood:null,
+      isShowFood:false
     };
   },
   methods: {
@@ -157,6 +168,10 @@ export default {
         this.listHeight.push(height);
       }
     },
+    handleFood(food){
+      this.selectedFood = food
+      this.isShowFood = true
+    }
   },
   computed: {
     // 根据右侧滚动位置 确定对应索引下标
@@ -181,6 +196,7 @@ export default {
   components: {
     shopCart,
     cartControl,
+    food,
     Scroll,
   },
   created() {

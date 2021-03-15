@@ -1,13 +1,17 @@
 <template>
   <div class="shopcart">
-    <div class="bottomNav-cartfooter" :class="{'bottomNav-carticon-empty':isEmpty}">
-      <span class="bottomNav-carticon">
+    <div
+      class="bottomNav-cartfooter"
+      :class="{ 'bottomNav-carticon-empty': isEmpty }"
+    >
+      <span class="bottomNav-carticon" @click="showCartView = !showCartView">
         <i class="fa fa-cart-plus"></i>
+        <span v-if="totalCount">{{ totalCount }}</span>
       </span>
-      <div class="bottomNav-cartInfo">
+      <div class="bottomNav-cartInfo" @click="showCartView = !showCartView">
         <p class="bottomNav-carttotal">
           <span v-if="isEmpty">未选购商品</span>
-          <span v-else>￥0</span>
+          <span v-else>￥{{ totalPrice.toFixed(2) }}</span>
         </p>
         <p class="bottomNav-cartdelivery">
           另需配送费{{ shopInfo.rst.float_delivery_fee }}元
@@ -20,10 +24,48 @@
         <span v-else>去结算</span>
       </button>
     </div>
+    <transition name="fade">
+      <div
+        class="cartview-cartmask"
+        @click.self=" showCartView = false"
+        v-if="showCartView && !isEmpty"
+      >
+        <div class="cartview-cartbody">
+          <div class="cartview-cartheader">
+            <span>已选商品</span>
+            <button @click.prevent="clearFoods">
+              <i class="fa fa-trash-o"></i>
+              <span>清空</span>
+            </button>
+          </div>
+          <div class="entityList-cartbodyScroller">
+            <ul class="entityList-cartlist">
+              <li
+                class="entityList-entityrow"
+                v-for="(item, index) in selectFoods"
+                :key="index"
+              >
+                <h4>
+                  <span>{{ item.name }}</span>
+                </h4>
+                <span class="entityList-entitytotal">{{
+                  item.activity.fixed_price
+                }}</span>
+                <cart-control :food="item"></cart-control>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+
+import cartControl from "components/common/shop/cartControl";
+
+
 export default {
   name: "shopCart",
   props: {
@@ -34,11 +76,63 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      totalCount: 0,
+      totalPrice: 0,
+      selectFoods: [],
+      showCartView: false,
+    };
+  },
+  methods:{
+    clearFoods(){
+      this.shopInfo.recommend.forEach(recommend =>{
+        recommend.items.forEach(item =>{
+          item.count = 0
+        })
+      })
+      this.shopInfo.menu.forEach(menu =>{
+        menu.foods.forEach(food =>{
+          food.count = 0
+        })
+      })
+    }
+  },
   computed: {
     isEmpty() {
       let empty = true;
+      this.totalCount = 0;
+      this.totalPrice = 0;
+      this.selectFoods = [];
+      this.shopInfo.recommend.forEach((recommend) => {
+        recommend.items.forEach((item) => {
+          if (item.count) {
+            empty = false;
+            this.totalCount += item.count;
+            this.totalPrice += item.activity.fixed_price * item.count;
+            this.selectFoods.push(item);
+          }
+        });
+      });
+
+      this.shopInfo.menu.forEach((menu) => {
+        menu.foods.forEach((food) => {
+          if (food.count) {
+            empty = false;
+            this.totalCount += food.count;
+            this.totalPrice += food.activity.fixed_price * food.count;
+            this.selectFoods.push(food);
+          }
+        });
+      });
       return empty;
     },
+  },
+  components:{
+    cartControl,
+  },
+  created() {
+    console.log(this.shopInfo);
   },
 };
 </script>
@@ -114,5 +208,110 @@ export default {
 .bottomNav-carticon-empty .submit-btn {
   background-color: #535356 !important;
 }
+.bottomNav-carticon > span {
+  position: absolute;
+  right: -1.2vw;
+  top: -1.333333vw;
+  line-height: 1;
+  background-image: linear-gradient(-90deg, #ff7416, #ff3c15 98%);
+  color: #fff;
+  border-radius: 3.2vw;
+  padding: 0.833333vw 1.333333vw;
+  font-size: 0.6rem;
+}
+.cartview-cartmask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+}
+.cartview-cartbody {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  bottom: 12.8vw;
+  z-index: 201;
+  opacity: 1;
+  font-size: 1rem;
+}
+.cartview-cartheader {
+  display: flex;
+  align-items: center;
+  padding: 0 4vw;
+  border-bottom: 0.133333vw solid #ddd;
+  background-color: #eceff1;
+  color: #666;
+  height: 10.666667vw;
+}
+.cartview-cartheader > span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.cartview-cartheader > button {
+  border: none;
+  outline: none;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding-left: 4vw;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.8rem;
+  line-height: 4vw;
+  background: none;
+}
+.cartview-cartheader > button > span {
+  margin-left: 0.8vw;
+}
+.entityList-cartbodyScroller {
+  overflow: auto;
+  max-height: 80vw;
+}
+.entityList-entityrow {
+  border-bottom: 0.133333vw solid #eee;
+  display: flex;
+  align-items: center;
+  padding: 2vw 3.333333vw 2vw 0;
+  min-height: 12.666667vw;
+  margin-left: 3.333333vw;
+}
+.entityList-entityrow > h4 {
+  flex: 5.5;
+  line-height: normal;
+}
+.entityList-entityrow > h4 > span {
+  display: inline-block;
+  font-style: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  max-width: 46.666667vw;
+}
+.entityList-entitytotal {
+  color: rgb(255, 83, 57);
+  flex: 2.5;
+  text-align: left;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.entityList-entitytotal::before {
+  content: "\A5";
+  font-size: 0.6rem;
+  color: currentColor;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease-out;
+}
 
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

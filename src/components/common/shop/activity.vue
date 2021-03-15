@@ -104,7 +104,7 @@ export default {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 7.333333vw 6.933333vw;
+  padding: 4.333333vw 6.933333vw;
   box-sizing: border-box;
 }
 .activity-sheet h2 {
