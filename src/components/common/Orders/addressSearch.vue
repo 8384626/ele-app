@@ -1,0 +1,91 @@
+<template>
+  <div v-if="showSearch" class="addressSearch">
+    <div class="search-view">
+      <div class="search-box">
+        <div class="search-box-input">
+          <i class="fa fa-search"></i>
+          <input
+            type="text"
+            placeholder="请输入小区/写字楼/学校等"
+            v-model="search_address"
+          />
+        </div>
+        <button class="search-box-btn">取消</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "order",
+  props: {
+    showSearch: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data(){
+    return {
+      search_address:""
+    }
+  }
+};
+</script>
+
+<style scoped>
+.addressSearch {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 45px;
+}
+.search-view {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.133333vw 3.866667vw 1.866667vw;
+}
+.search-box-input {
+  flex: 1;
+  border: 1px solid #ddd;
+  outline: 0;
+  color: #999;
+  height: 7.466667vw;
+  margin-right: 2.666667vw;
+  border-radius: 0.533333vw;
+  background: #f5f5f5;
+  padding: 0 2.133333vw;
+  display: flex;
+  align-items: center;
+}
+.search-box-input > input {
+  margin-left: 2vw;
+  width: 90%;
+  background: none;
+}
+input,
+button {
+  outline: none;
+  border: none;
+}
+.search-box-btn {
+  color: #333;
+  border-radius: 0.533333vw;
+  width: 14.8vw;
+  height: 7.466667vw;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+</style>

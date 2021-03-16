@@ -1,138 +1,162 @@
 <template>
-  <div class="wrapper" ref="wrapper">
-    <ul class="wcontent">
-      <li>列表1</li>
-    <li>列表2</li>
-    <li>列表3</li>
-    <li>列表4</li>
-    <li>列表5</li>
-    <li>列表6</li>
-    <li>列表7</li>
-    <li>列表8</li>
-    <li>列表9</li>
-    <li>列表10</li>
-    <li>列表11</li>
-    <li>列表12</li>
-    <li>列表13</li>
-    <li>列表14</li>
-    <li>列表15</li>
-    <li>列表16</li>
-    <li>列表17</li>
-    <li>列表18</li>
-    <li>列表19</li>
-    <li>列表20</li>
-    <li>列表21</li>
-    <li>列表22</li>
-    <li>列表23</li>
-    <li>列表24</li>
-    <li>列表25</li>
-    <li>列表26</li>
-    <li>列表27</li>
-    <li>列表28</li>
-    <li>列表29</li>
-    <li>列表30</li>
-    <li>列表31</li>
-    <li>列表32</li>
-    <li>列表33</li>
-    <li>列表34</li>
-    <li>列表35</li>
-    <li>列表36</li>
-    <li>列表37</li>
-    <li>列表38</li>
-    <li>列表39</li>
-    <li>列表40</li>
-    <li>列表41</li>
-    <li>列表42</li>
-    <li>列表43</li>
-    <li>列表44</li>
-    <li>列表45</li>
-    <li>列表46</li>
-    <li>列表47</li>
-    <li>列表48</li>
-    <li>列表49</li>
-    <li>列表50</li>
-    <li>列表51</li>
-    <li>列表52</li>
-    <li>列表53</li>
-    <li>列表54</li>
-    <li>列表55</li>
-    <li>列表56</li>
-    <li>列表57</li>
-    <li>列表58</li>
-    <li>列表59</li>
-    <li>列表60</li>
-    <li>列表61</li>
-    <li>列表62</li>
-    <li>列表63</li>
-    <li>列表64</li>
-    <li>列表65</li>
-    <li>列表66</li>
-    <li>列表67</li>
-    <li>列表68</li>
-    <li>列表69</li>
-    <li>列表70</li>
-    <li>列表71</li>
-    <li>列表72</li>
-    <li>列表73</li>
-    <li>列表74</li>
-    <li>列表75</li>
-    <li>列表76</li>
-    <li>列表77</li>
-    <li>列表78</li>
-    <li>列表79</li>
-    <li>列表80</li>
-    <li>列表81</li>
-    <li>列表82</li>
-    <li>列表83</li>
-    <li>列表84</li>
-    <li>列表85</li>
-    <li>列表86</li>
-    <li>列表87</li>
-    <li>列表88</li>
-    <li>列表89</li>
-    <li>列表90</li>
-    <li>列表91</li>
-    <li>列表92</li>
-    <li>列表93</li>
-    <li>列表94</li>
-    <li>列表95</li>
-    <li>列表96</li>
-    <li>列表97</li>
-    <li>列表98</li>
-    <li>列表99</li>
-    <li>列表100</li>
-    <li>列表101</li>
-    <li>列表102</li>
-    <li>列表103</li>
-    <li>列表104</li>
-    <li>列表105</li>
-    <li>列表106</li>
-    <li>列表107</li>
-    <li>列表108</li>
-    <li>列表109</li>
-    <li>列表110</li>
-    </ul>
+  <div class="me">
+    <div class="headInfo">
+      <div class="head-img"></div>
+      <div class="head-profile">
+        <p class="user-id" v-if="userInfo">{{ userInfo._id }}</p>
+        <p class="user-id" @click="handleLogin" v-else>登录/注册</p>
+        <p class="user-phone">
+          <i class="fa fa-mobile"></i>
+          <span v-if="userInfo">{{ userInfo.phone | encryptPhone }}</span>
+          <span v-else>登录后享受更多特权</span>
+        </p>
+      </div>
+      <i class="fa fa-angle-right"></i>
+    </div>
+    <div v-if="userInfo">
+      <div class="address-cell">
+        <i class="fa fa-map-marker"></i>
+        <div class="address-index" @click="myAddress">
+          <span>我的地址</span>
+          <i class="fa fa-angle-right"></i>
+        </div>
+      </div>
+      <button class="loginOut-btn" @click="handleLogOut">退出登录</button>
+    </div>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
 export default {
-name:'me',
-data(){
-  return {
-    scroll:null
-  }
-},
-mounted() {
-  this.scroll=new BScroll(this.$refs.wrapper,{})
-},
-}
+  name: "me",
+  data() {
+    return {
+      userInfo: "",
+    };
+  },
+  methods: {
+    handleLogin() {
+      this.$router.push("/login");
+    },
+    getData() {
+      const user_id = localStorage.getItem("ele_login");
+      this.$axios(`/api/user/user_info/${user_id}`).then((res) => {
+        console.log(res.data);
+        this.userInfo = res.data;
+      });
+    },
+    handleLogOut() {
+      localStorage.removeItem("ele_login")
+      this.$router.push("/login")
+    },
+    myAddress(){
+      if(this.userInfo.myAddress.length > 0){
+        this.$router.push("/myAddress")
+      }else {
+        this.$router.push("/addAddress")
+      }
+    }
+  },
+  filters: {
+    encryptPhone(phone) {
+      return phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
+    },
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => vm.getData());
+  },
+};
 </script>
 
 <style scoped>
-.wrapper{
-  /* height: 300px; */
-  background-color:red;
+.me {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+.headInfo {
+  display: flex;
+  background-image: linear-gradient(90deg, #0af, #0085ff);
+  padding: 6.666667vw 4vw;
+  color: #fff;
+  align-items: center;
+}
+.head-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-position: 0px 0px;
+  background-size: 60px;
+  background-image: url(https://shadow.elemecdn.com/faas/h5/static/sprite.3ffb5d8.png);
+}
+.head-profile {
+  overflow: hidden;
+  margin-left: 4.8vw;
+  flex-grow: 1;
+}
+.head-profile .user-id {
+  max-width: 40vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.3rem;
+  margin-bottom: 2.133333vw;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+.head-profile .user-phone {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+.user-phone > i {
+  margin-right: 0.666667vw;
+  font-size: 1rem;
+}
+.headInfo > i {
+  font-size: 1.2rem;
+}
+.address-cell {
+  margin-top: 2.666667vw;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
+  line-height: 4.533333vw;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  padding-left: 6.666667vw;
+  color: #333;
+}
+.address-cell > i {
+  font-size: 1.3rem;
+  color: rgb(74, 165, 240);
+  margin-right: 2.666667vw;
+}
+.address-index {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3.733333vw 2.666667vw 3.733333vw 0;
+  align-content: center;
+}
+.address-index > i {
+  font-size: 1.3rem;
+  color: #ccc;
+}
+.loginOut-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 3.733333vw 0;
+  margin: 5.333333vw 0;
+  color: #ff5339;
+  border-radius: 0.8vw;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #fff;
+  border: 0;
 }
 </style>

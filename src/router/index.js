@@ -34,6 +34,16 @@ const routes = [
         name: "city",
         component: () => import("components/common/City.vue"),
       },
+      {
+        path: "/myAddress",
+        name: "myAddress",
+        component: () => import("../views/Orders/myAddress.vue"),
+      },
+      {
+        path: "/addAddress",
+        name: "addAddress",
+        component: () => import("../views/Orders/addAddress.vue"),
+      },
     ],
   },
   {
@@ -66,7 +76,7 @@ const routes = [
         name: "seller",
         component: () => import("../views/shops/seller.vue"),
       },
-    ]
+    ],
   },
 ];
 
