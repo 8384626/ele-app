@@ -1,7 +1,7 @@
 <template>
   <div class="formBlock">
     <div class="label-wrap">{{ label }}</div>
-    <div class="input-group-wrap">
+    <div class="input-group-wrap" @click="$emit('click')">
       <div class="input-wrap">
         <input
           v-if="!textarea"
@@ -19,11 +19,15 @@
           @input="$emit('input', $event.target.value)"
           rows="2"
           maxlength="100"
-        >
-        </textarea>
-        <i :class="'fa fa-' + icon"></i>
+        ></textarea>
+        <i v-if="icon" :class="'fa fa-' + icon"></i>
       </div>
-      <tab-tag v-if="tags" :tags="tags" :selectTag = "sex" @checkTag= "checkTag"></tab-tag>
+      <tab-tag
+        v-if="tags.length > 0 "
+        :tags="tags"
+        :selectTag="sex"
+        @checkTag="checkTag"
+      ></tab-tag>
     </div>
   </div>
 </template>
@@ -64,15 +68,15 @@ export default {
         return [];
       },
     },
-    sex:{
-      type:String,
-      default:""
-    }
+    sex: {
+      type: String,
+      default: "",
+    },
   },
-  methods:{
-    checkTag(item){
-      this.$emit("checkSex",item)
-    }
+  methods: {
+    checkTag(item) {
+      this.$emit("checkSex", item);
+    },
   },
   components: {
     tabTag,

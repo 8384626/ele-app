@@ -102,7 +102,6 @@ export default {
       });
       this.$axios("/api/profile/filter").then((res) => {
         this.filterData = res.data;
-        console.log(res.data);
       });
       this.loadData();
     },

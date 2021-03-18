@@ -1,5 +1,5 @@
 <template>
-  <div class="input-wrap">
+  <div class="input-wrap" :class="{noneBorder:borderNoshow}">
     <span
       v-for="(item, index) in tags"
       :key="index"
@@ -26,6 +26,10 @@ export default {
       type: String,
       default: "",
     },
+    borderNoshow:{
+      type:Boolean,
+      default:false
+    }
   },
 };
 </script>
@@ -37,6 +41,9 @@ export default {
   display: flex;
   align-items: center;
   border-top: 1px solid #eee;
+}
+.noneBorder{
+  border: none !important;
 }
 .input-wrap .form-span {
   background: #fff;

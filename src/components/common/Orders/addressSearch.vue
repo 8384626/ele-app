@@ -10,8 +10,14 @@
             v-model="search_address"
           />
         </div>
-        <button class="search-box-btn">取消</button>
+        <button class="search-box-btn" @click="$emit('close')">取消</button>
       </div>
+      <ul class="search-list">
+        <li class="search-row" v-for="(item,index) in areaList" :key="index" @click="selectAddress(item)">
+          <p class="search-row-title">{{item.name}}</p>
+          <p class="search-row-location">{{item.district}}{{item.address}}</p>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -24,12 +30,56 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  data(){
-    return {
-      search_address:""
+    addressInfo: { 
+      type:Object,
+      default(){
+        return {}
+      }
     }
-  }
+  },
+  data() {
+    return {
+      search_address: "",
+      areaList:[]
+    };
+  },
+  methods: {
+    searchPlace(val) {
+      console.log(this.city);
+      // 调用高德地图的搜索
+      AMap.plugin("AMap.Autocomplete",  () => {
+        // 实例化Autocomplete
+        var autoOptions = {
+          //city 限定城市，默认全国
+          city: this.city,
+        };
+        var autoComplete = new AMap.Autocomplete(autoOptions);
+        autoComplete.search(val,  (status, result)=> {
+          // 搜索成功时，result即是对应的匹配数据
+          // console.log(result);
+          this.areaList = result.tips
+        });
+      });
+    },
+    selectAddress(item){
+      const newStr =item.name+item.district+item.address
+      this.addressInfo.address = newStr
+      this.$emit('close')
+    }
+  },
+  computed: {
+    city() {
+      return (
+        this.$store.getters.location.addressComponent.city ||
+        this.$store.getters.location.addressComponent.province
+      );
+    }
+  },
+  watch: {
+    search_address(val) {
+      this.searchPlace(val);
+    },
+  },
 };
 </script>
 
@@ -87,5 +137,21 @@ button {
   height: 7.466667vw;
   font-size: 0.9rem;
   white-space: nowrap;
+}
+.search-list {
+  padding-left: 4vw;
+}
+.search-row {
+  border-bottom: 0.266667vw solid #eee;
+  padding: 2.533333vw 0 3.333333vw;
+  line-height: 1.2;
+}
+.search-row-title {
+  color: #333;
+  font-size: 1rem;
+}
+.search-row-location {
+  color: #999;
+  font-size: 0.866rem;
 }
 </style>

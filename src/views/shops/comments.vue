@@ -85,7 +85,6 @@ export default {
   methods: {
     getData() {
       this.$axios("/api/profile/comments").then((res) => {
-        console.log(res.data);
         this.valuetion = res.data;
       });
     },

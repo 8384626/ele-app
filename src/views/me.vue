@@ -41,7 +41,6 @@ export default {
     getData() {
       const user_id = localStorage.getItem("ele_login");
       this.$axios(`/api/user/user_info/${user_id}`).then((res) => {
-        console.log(res.data);
         this.userInfo = res.data;
       });
     },
@@ -53,7 +52,20 @@ export default {
       if(this.userInfo.myAddress.length > 0){
         this.$router.push("/myAddress")
       }else {
-        this.$router.push("/addAddress")
+        this.$router.push({
+        name:"addAddress",
+        params:{
+          title:"添加地址",
+          addressInfo:{
+            name:"",
+            sex:"",
+            phone:"",
+            address:"",
+            bottom:"",
+            tag:""
+          }
+        }
+      })
       }
     }
   },

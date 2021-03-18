@@ -35,7 +35,6 @@
 <script>
 import inputGroup from "../components/common/inputGroup.vue";
 
-
 export default {
   name: "login",
   data() {
@@ -47,15 +46,14 @@ export default {
       disabled: false,
     };
   },
-  computed:{
-    isClick(){
-      if(!this.phone || !this.verifyCode) return true;
+  computed: {
+    isClick() {
+      if (!this.phone || !this.verifyCode) return true;
       return false;
-    }
+    },
   },
   methods: {
     getVerifyCode() {
-      console.log(this.phone);
       if (this.validatePhone()) {
         // 发送网络请求
         this.validateBtn();
@@ -64,6 +62,18 @@ export default {
         }).then(res =>{
           console.log(res);
         })
+        // const data ={
+        //   receive:this.phone,
+        //   templateId:"M09DD535F4"
+        // }
+        // fetch("http://smssend.shumaidata.com/sms/send",{
+        //   method:'POST',
+        //   headers:{
+        //     "Content-type": "application/json",
+        //     Authorization:"APPCODE 63da09d147e348899492a0fb696f8654"
+        //   },
+        //   body:JSON.stringify(data)
+        // })
       }
     },
     validateBtn() {
@@ -99,24 +109,27 @@ export default {
         return true;
       }
     },
-    handlelogin(){
+    handlelogin() {
       // 取消错误提醒
-      this.errors = {}
+      this.errors = {};
       // 发送请求
-      this.$axios.post("/api/posts/sms_back",{
-        phone: this.phone,
-        code:this.verifyCode
-      }).then(res =>{
-        console.log(res);
-        // 检验成功 设置登录状态
-        localStorage.setItem('ele_login',res.data.user._id)
-        this.$router.push("/")
-      }).catch(err =>{
-        this.errors ={
-          code:err.response.data.msg 
-        }
-      })
-    }
+      this.$axios
+        .post("/api/posts/sms_back", {
+          phone: this.phone,
+          code: this.verifyCode,
+        })
+        .then((res) => {
+          console.log(res);
+          // 检验成功 设置登录状态
+          localStorage.setItem("ele_login", res.data.user._id);
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          this.errors = {
+            code: err.response.data.msg,
+          };
+        });
+    },
   },
   components: {
     inputGroup,

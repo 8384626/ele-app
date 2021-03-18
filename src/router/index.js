@@ -44,6 +44,26 @@ const routes = [
         name: "addAddress",
         component: () => import("../views/Orders/addAddress.vue"),
       },
+      {
+        path: "/settlement",
+        name: "settlement",
+        component: () => import("../views/Orders/settleMent.vue"),
+      },
+      {
+        path: "/remark",
+        name: "remark",
+        component: () => import("../views/Orders/remark.vue"),
+      },
+      {
+        path: "/pay",
+        name: "pay",
+        component: () => import("../views/Orders/pay.vue"),
+      },
+      {
+        path: "/orderInfo",
+        name: "orderInfo",
+        component: () => import("../views/Orders/orderInfo.vue"),
+      },
     ],
   },
   {
