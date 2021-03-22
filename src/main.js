@@ -17,14 +17,17 @@ Vue.config.productionTip = false;
 Vue.use(MintUI)
 
 axios.defaults.baseURL = 'https://c.iwanmen.com/element/';
+// axios.defaults.headers.options['Content-Type'] = 'application/json;chearset=utf-8'
+// axios.defaults.headers = {"Content-Type": "application/json"}
+axios.defaults.timeout = 5000;
+
 // 请求拦截
 axios.interceptors.request.use(
-
+  
   config => {
-    if(config.method == 'post'){
-      config.data = qs.stringify(config.data)
+    if (config.method == 'post') {
+      config.data = qs.stringify(config.data);
     }
-    // 加载动画
     Indicator.open();
     return config;
   },

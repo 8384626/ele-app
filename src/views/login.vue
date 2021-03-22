@@ -55,25 +55,16 @@ export default {
   methods: {
     getVerifyCode() {
       if (this.validatePhone()) {
-        // 发送网络请求
         this.validateBtn();
-        this.$axios.post('/api/posts/sms_send',{
-          phone: this.phone
-        }).then(res =>{
-          console.log(res);
-        })
-        // const data ={
-        //   receive:this.phone,
-        //   templateId:"M09DD535F4"
-        // }
-        // fetch("http://smssend.shumaidata.com/sms/send",{
-        //   method:'POST',
-        //   headers:{
-        //     "Content-type": "application/json",
-        //     Authorization:"APPCODE 63da09d147e348899492a0fb696f8654"
-        //   },
-        //   body:JSON.stringify(data)
-        // })
+        // 发送网络请求
+        this.$axios
+          .post("/api/posts/sms_send", {
+            phone: this.phone,
+          })
+          .then((res) => {
+            console.log(res);
+            alert(res.data.msg);
+          });
       }
     },
     validateBtn() {

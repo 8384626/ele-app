@@ -100,11 +100,23 @@ const routes = [
   },
 ];
 
+
 const router = new VueRouter({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   linkActiveClass:"active",
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  const isLogin = localStorage.ele_login ? true : false;
+  if (to.path == '/login') {
+    next();
+  } else {
+    // 是否在登录状态下
+    isLogin ? next() : next('/login');
+  }
+});
+
 
 export default router;

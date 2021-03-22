@@ -79,20 +79,20 @@ export default {
     },
     addOrder() {
       const userId = localStorage.getItem("ele_login");
-      let orderInfo = {
+      let orderlist = {
         orderInfo: this.orderInfo,
-        totalPrice: this.totalPrice,
         userInfo: this.userInfo,
+        totalPrice: this.totalPrice,
         remarkInfo: this.remarkInfo,
+        image_path: this.orderInfo.shopInfo.image_path,
+        shopInfoName: this.orderInfo.shopInfo.name,
+        selectFoodsName: this.orderInfo.selectFoods[0].name
       };
-
-      this.$axios
-        .post(`/api/user/add_order/${userId}`, orderInfo)
-        .then((res) => {
-          // console.log(res);
-          this.$router.push('/order')
+      // alert(JSON.stringify(orderlist));
+      this.$axios.post(`/api/user/add_order/${userId}`, orderlist).then(res => {
+          this.$router.push("/order");
         });
-    },
+    }
   },
   computed: {
     orderInfo() {

@@ -1,42 +1,27 @@
 <template>
   <div class="order">
-    <div
-      :class="{'order-card-body':order.orderInfo}"
-      v-for="(order, index) in orderlist"
-      :key="index"
-    >
-      <div
-        class="order-card-wrap"
-        v-if="order.orderInfo"
-        @click="
-          $router.push({
-            name: 'orderInfo',
-            params: order,
-          })
-        "
-      >
-        <img :src="order.orderInfo.shopInfo.image_path" alt="" />
+    <div class="order-card-body" v-for="(order,index) in orderlist" :key="index">
+      <div class="order-card-wrap" v-if="order.shopInfoName" >
+        <img :src="order.image_path" alt />
         <div class="order-card-content">
           <div class="order-card-head">
             <div class="title">
               <a>
-                <span>{{ order.orderInfo.shopInfo.name }}</span>
+                <span>{{order.shopInfoName}}</span>
                 <i class="fa fa-angle-right"></i>
               </a>
-              <p>订单已经完成</p>
+              <p>订单已完成</p >
             </div>
-            <p class="date-item">
-              {{ order.date }}
-            </p>
+            <p class="date-time">{{order.date}}</p >
           </div>
           <div class="order-card-detail">
-            <p class="detail">{{ order.orderInfo.selectFoods[0].name }}</p>
-            <p class="price">￥{{ order.totalPrice }}</p>
+            <p class="detail">{{order.selectFoodsName}}</p >
+            <p class="price">¥{{order.totalPrice}}</p >
           </div>
         </div>
       </div>
-      <div class="order-card-bottom" v-if="order.orderInfo">
-        <div class="cardbutton" @click="$router.push('/shop')">再来一单</div>
+      <div class="order-card-bottom">
+        <button class="cardbutton" @click="$router.push('/shop')">再来一单</button>
       </div>
     </div>
   </div>
@@ -47,23 +32,22 @@ export default {
   name: "order",
   data() {
     return {
-      orderlist: [],
+      orderlist: []
     };
   },
-  methods: {
-    getData() {
-      const userId = localStorage.getItem("ele_login");
-      this.$axios(`/api/user/orders/${userId}`).then((res) => {
-        // console.log(res.data);
-        this.orderlist = res.data.orderlist;
-      });
-    },
-  },
   beforeRouteEnter(to, from, next) {
-    next((vm) => {
+    next(vm => {
       vm.getData();
     });
   },
+  methods: {
+    getData() {
+      this.$axios(`/api/user/orders/${localStorage.ele_login}`).then(res => {
+        // console.log(res.data);
+        this.orderlist = res.data.orderlist;
+      });
+    }
+  }
 };
 </script>
 

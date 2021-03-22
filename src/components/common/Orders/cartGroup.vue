@@ -1,6 +1,6 @@
 <template>
   <section class="checkout-section cart-group">
-    <h3>{{ orderInfo.shopInfo.name }}</h3>
+    <h3>{{ orderInfo.shopInfoName }}</h3>
     <ul>
       <li v-for="(food, index) in orderInfo.selectFoods" :key="index">
         <img :src="food.image_path" alt="" />

@@ -18,7 +18,7 @@
         <!-- 点餐信息 -->
         <cart-group
           v-if="orderDetail.orderInfo"
-          :orderInfo="orderDetail.orderInfo"
+          :orderInfo="orderDetail"
           :totalPrice="orderDetail.totalPrice"
         ></cart-group>
       </div>
@@ -33,9 +33,7 @@
           <li class="list-item">
             <span>送货地址:</span>
             <div class="content">
-              <span>{{orderDetail.userInfo.name}}{{orderDetail.userInfo.sex}}</span>
-              <span>{{orderDetail.userInfo.phone}}</span>
-              <span>{{orderDetail.userInfo.address}}{{orderDetail.userInfo.bottom}}</span>
+              <span>{{orderDetail.shopInfoName}}</span>
             </div>
           </li>
         </ul>
@@ -86,7 +84,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.orderDetail = to.params;
-      // console.log(vm.orderDetail);
+      console.log(vm.orderDetail);
     });
   },
 };

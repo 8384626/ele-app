@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     searchPlace(val) {
-      console.log(this.city);
       // 调用高德地图的搜索
       AMap.plugin("AMap.Autocomplete",  () => {
         // 实例化Autocomplete
