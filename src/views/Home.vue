@@ -74,10 +74,9 @@
 
 <script>
 import { Swiper, SwiperItem } from "components/content/swiper";
+import Scroll from "components/content/scroll/scroll";
 import FilterView from "components/common/FilterView";
 import indexShop from "components/common/indexShop";
-
-import { Swipe, SwipeItem, Loadmore } from "mint-ui";
 export default {
   name: "home",
   data() {
@@ -109,7 +108,6 @@ export default {
       this.showFilter = isShow;
     },
     updata(condation) {
-      // console.log(condation);
       this.data = condation;
       this.loadData();
     },
@@ -121,8 +119,6 @@ export default {
       this.$axios
         .post(`/api/profile/restaurants/${this.page}/${this.size}`, this.data)
         .then((res) => {
-          // console.log(res.data);
-          this.$refs.loadmore.onTopLoaded();
           this.restaurants = res.data;
         });
     },
@@ -165,6 +161,7 @@ export default {
   components: {
     Swiper,
     SwiperItem,
+    Scroll,
     FilterView,
     indexShop,
   },
@@ -288,7 +285,4 @@ export default {
   height: calc(100% - 98px);
   overflow: auto;
 }
-/* .shoplist {
-  margin-bottom: 5px;
-} */
 </style>

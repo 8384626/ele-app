@@ -1,6 +1,6 @@
 <template>
   <div class="order">
-    <div class="order-card-body" v-for="(order,index) in orderlist" :key="index">
+    <div class="order-card-body" v-for="(order,index) in orderlist" :key="index" @click="goOrderInfo(index)">
       <div class="order-card-wrap" v-if="order.shopInfoName" >
         <img :src="order.image_path" alt />
         <div class="order-card-content">
@@ -46,6 +46,9 @@ export default {
         // console.log(res.data);
         this.orderlist = res.data.orderlist;
       });
+    },
+    goOrderInfo() {
+      // this.$router.push('/orderInfo')
     }
   }
 };

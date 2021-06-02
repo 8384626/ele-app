@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="logo">
-      <img src="../assets/img/login/logo.jpg" alt="" />
+      <img src="../assets/img/login/logo.png" alt="" />
     </div>
     <input-group
       type="number"
@@ -142,6 +142,7 @@ export default {
 }
 .logo img {
   width: 150px;
+  vertical-align:top;
 }
 .text_group,
 .login_des,

@@ -18,16 +18,16 @@ module.exports = {
     port: 8080,
     https: false,
     hotOnly: false,
-    // proxy: {
-    //   // 配置跨域
-    //   '/api': {
-    //     target: 'https://c.iwanmen.com/element/api/',
-    //     ws: true,
-    //     changOrigin: true,
-    //     pathRewrite: {
-    //       '^/api': ''
-    //     }
-    //   }
-    // }
+    proxy: {
+      // 配置跨域
+      '/api': {
+        target: 'https://eleme4-2021.herokuapp.com/api/',
+        ws: true,
+        changOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   },
 };

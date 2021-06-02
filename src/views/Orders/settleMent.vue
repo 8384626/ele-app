@@ -117,6 +117,7 @@ export default {
       });
     },
     handlePage() {
+      console.log(this.userInfo);
       if (!this.userInfo) {
         Toast({
           message: "请选择收货地址",
@@ -125,6 +126,7 @@ export default {
         });
         return
       }
+      console.log();
       this.$router.push("/pay")
     },
   },

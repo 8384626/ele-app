@@ -143,6 +143,7 @@ export default {
   line-height: 3.733333vw;
   padding-right: 8vw;
 }
+/* 向上拉 */
 .move-enter-active,
 .move-leave-active {
   transition: all 0.25s ease-in;

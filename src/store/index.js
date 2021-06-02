@@ -21,7 +21,7 @@ const state={
     remark:""
   }
 }
-
+console.log(state.remarkInfo);
 const getters = {
   location:state => state.location,
   address: state => state.address,

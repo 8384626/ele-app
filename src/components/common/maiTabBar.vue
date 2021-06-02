@@ -47,8 +47,8 @@ import tabbaritem from "../content/tabbar/tabbaritem";
 export default {
   components: {
     tabbar,
-    tabbaritem
-  }
+    tabbaritem,
+  },
 };
 </script>
 

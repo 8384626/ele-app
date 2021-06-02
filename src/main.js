@@ -5,7 +5,7 @@ import 'mint-ui/lib/style.css';
 import router from "./router";
 import store from "./store";
 import axios from "axios";
-import qs from "qs"
+// import qs from "qs"
 
 // 应用mintUi
 
@@ -16,7 +16,7 @@ Vue.config.productionTip = false;
 
 Vue.use(MintUI)
 
-axios.defaults.baseURL = 'https://c.iwanmen.com/element/';
+// axios.defaults.baseURL = 'https://element-interface-october.herokuapp.com/';
 // axios.defaults.headers.options['Content-Type'] = 'application/json;chearset=utf-8'
 // axios.defaults.headers = {"Content-Type": "application/json"}
 axios.defaults.timeout = 5000;
@@ -25,10 +25,10 @@ axios.defaults.timeout = 5000;
 axios.interceptors.request.use(
   
   config => {
-    if (config.method == 'post') {
-      config.data = qs.stringify(config.data);
-    }
-    Indicator.open();
+    // if (config.method == 'post') {
+    //   config.data = qs.stringify(config.data);
+    // }
+    // Indicator.open();
     return config;
   },
   error => {
